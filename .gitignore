@@ -1,0 +1,20 @@
+# Python files ¤
+*.pyc
+__pycache__/
+local_settings.py
+
+# Misc #
+db.sqlite3-journal
+Thumbs.db
+
+# Backup files # 
+*.bak
+
+# Visual Studio Code # 
+.vscode/* 
+!.vscode/settings.json 
+!.vscode/tasks.json 
+!.vscode/launch.json 
+!.vscode/extensions.json 
+.history
+
