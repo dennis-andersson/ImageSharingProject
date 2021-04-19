@@ -1,12 +1,6 @@
 <ul class="nav">
     <li class="nav-item">
-        <a href="/">Home</a>
-    </li>
-    <li class="nav-item">
-        <a href="{% url 'products' %}">Products List</a>
-    </li>
-    <li class="nav-item">
-        <a href="{% url 'todos' %}">Todo Lists</a>
+        <a href="/">ProjectName</a>
     </li>
     <li>
         <div class="dropdown">
@@ -17,8 +11,24 @@
             </div>
         </div>
     </li>
-    
+
+    <li>
+        <div class="search">
+            <form action="/search/" method="GET">
+                <input type="text" class="searchTerm" placeholder="What are you looking for?">
+                <button type="submit" class="searchButton">Search
+<!--
+                      <i class="fa fa-search"></i>
+-->
+               </button>
+            </form>
+         </div>
+    </li>
+
     {% if user.is_authenticated %}
+    <li class="nav-item">
+        <a href="{% url 'user_profile' %}">Profile</a>
+    </li>
     <li class="nav-item">
         <a href="{% url 'logout' %}">Logout</a>
     </li>

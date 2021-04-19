@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<center>
+    <h1>Welcome to ProjectName</h1>
+    </br></br></br>
+
+    {% if user.is_authenticated %}
+        <h2>
+            Welcome back!</br>
+            <a href="{% url 'image_browse' %}" class="browseButton">Browse</a>
+        </h2>
+    {% else %}
+        <h2>
+            New to ProjectName? <a href="{% url 'signup' %}" class="welomePageLink">Create an account</a></br>
+            or if you're already registered? <a href="{% url 'login' %}" class="welomePageLink">Log in</a>
+        </h2>
+    {% endif %}
+</center>
+
+{% endblock %}

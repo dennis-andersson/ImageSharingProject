@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="post-container">
+    <img class="image" src="{{ image.file.url }}" alt="{{ image.title }}" />
+    <p class="image-title">{{ image.title }}</p>
+</div>
+
+{% endblock %}
