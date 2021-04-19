@@ -1,0 +1,33 @@
+<ul class="nav">
+    <li class="nav-item">
+        <a href="/">Home</a>
+    </li>
+    <li class="nav-item">
+        <a href="{% url 'products' %}">Products List</a>
+    </li>
+    <li class="nav-item">
+        <a href="{% url 'todos' %}">Todo Lists</a>
+    </li>
+    <li>
+        <div class="dropdown">
+            <button class="dropdown-button">Images</button>
+            <div class="dropdown-content">
+                <a href="{% url 'images_list' %}">List</a>
+                <a href="{% url 'image_upload' %}">Upload</a>
+            </div>
+        </div>
+    </li>
+    
+    {% if user.is_authenticated %}
+    <li class="nav-item">
+        <a href="{% url 'logout' %}">Logout</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a href="{% url 'login' %}">Login</a>
+    </li>
+    <li class="nav-item">
+        <a href="{% url 'signup' %}">Signup</a>
+    </li>
+    {% endif %}
+</ul>
