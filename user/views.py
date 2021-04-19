@@ -1,6 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
+from .forms import SignUpForm
 
+
+def profile_view(request):
+    return render(request, "user-profile.html", {})
 
 def login_view(request):
     if request.method == "POST":
