@@ -2,17 +2,21 @@
 
 {% block content %}
 
-<br>
-{% if error %}
-<p>{{ error }}</p>
-{% endif %}
-<br>
-<form method="POST">
-    {% csrf_token %}
+<center>
+    <div class="loginform">
+        <br>
+        {% if error %}
+        <p>{{ error }}</p>
+        {% endif %}
+        <br>
+        <form method="POST">
+            {% csrf_token %}
 
-    <input type="text" name="username" required placeholder="Username" /><br>
-    <input type="password" name="password" required placeholder="Password" /><br>
-    <input type="submit" value="Login" />
-</form>
+            <input type="text" name="username" required placeholder="Username" /><br>
+            <input type="password" name="password" required placeholder="Password" /><br>
+            <input type="submit" value="Login" />
+        </form>
+    </div>
+</center>
 
 {% endblock %}

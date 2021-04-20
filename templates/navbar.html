@@ -15,7 +15,7 @@
     <li>
         <div class="search">
             <form action="/search/" method="GET">
-                <input type="text" class="searchTerm" placeholder="What are you looking for?">
+                <input type="text" class="searchTerm" placeholder="What are you looking for?" name="q">
                 <button type="submit" class="searchButton">Search
 <!--
                       <i class="fa fa-search"></i>
@@ -27,7 +27,7 @@
 
     {% if user.is_authenticated %}
     <li class="nav-item">
-        <a href="{% url 'user_profile' %}">Profile</a>
+        <a href="{% url 'user_profile' id=user.id %}">Profile</a>
     </li>
     <li class="nav-item">
         <a href="{% url 'logout' %}">Logout</a>

@@ -2,12 +2,19 @@
 
 {% block content %}
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <input type="submit" value="Upload">
-</form>
+<center>
+    <div class="upload">
+        <h1>Upload an image</h1>
+        <div class="uploadform">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+            
+                {{ form.as_p }}
+            
+                <input type="submit" value="Upload">
+            </form>
+        </div>
+    </div>
+</center>
 
 {% endblock %}
