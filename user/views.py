@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from .forms import SignUpForm
+from images.models import Image, SavedImage
+from utils import get_image_dict, get_images_dict
 
 
 def profile_view(request, id):
-    savedimages = SavedImage.objects.filter(user.id=request.user.id)
-    myimages = Image.objects.filter(user.id=request.user.id)
+    savedimages = SavedImage.objects.filter(user_id=request.user.id)
+    savedimages = get_images_dict([si.image for si in savedimages])
+    myimages = get_images_dict(Image.objects.filter(uploader_id=request.user.id))
     return render(request, "user-profile.html", {'savedimages': savedimages, 'myimages': myimages})
 
 def login_view(request):
