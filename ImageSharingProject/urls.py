@@ -26,8 +26,12 @@ urlpatterns = [
     path('signup/', signup_view, name='signup'),
     path('upload/', image_upload_view, name='image_upload'),
     path('uploads/', images_uploads_view, name='image_uploads'),
+    path('post/<int:id>', images_post_view, name='image_post'),
+    path('post/edit/<int:id>', images_edit_view, name='image_edit'),
+    path('post/delete/<int:id>', images_delete_view, name='image_delete'),
     path('list/', images_list_view, name='images_list'),
     path('browse/', images_browse_view, name='image_browse'),
     path('search/', images_search_view, name='image_search'),
     path('profile/', profile_view, name='user_profile'),
+    path('profile/<int:id>', profile_view, name='user_profile'),
 ]
