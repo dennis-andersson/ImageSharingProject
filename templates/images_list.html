@@ -5,8 +5,7 @@
 <div class="images-container">
     {% for image in images %}
     <div class="image-container">
-        <a href="{ url 'images_post_view' image.id }"><img class="image" src="{{ image.image.url }}" alt="{{ image.title }}" /></a>
-        <p class="image-title">{{ image.title }}</p>
+        <a href="{% url 'image_post' image.id %}"><img class="image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
     </div>
     {% endfor %}
 </div>

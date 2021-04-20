@@ -2,6 +2,32 @@
 
 {% block content %}
 
+<script type='text/javascript'>
+function switchTab(tabName, element) {
+  // Hide all elements with class="tabcontent" by default */
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Remove the background color of all tablinks/buttons
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.backgroundColor = "grey";
+  }
+
+  // Show the specific tab content
+  document.getElementById(tabName).style.display = "block";
+
+  // Add the specific color to the button used to open the tab content
+  element.style.backgroundColor = "darkgrey";
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("default").click(); 
+</script>
+
 <center>
     <div class="userdetails">
         <h1>{{ user.first_name }} {{ user.last_name }}</h1>
@@ -10,24 +36,22 @@
     
     <div class="profilecontent">
         <div class="tab">
-            <button class="tablinks" onclick="">Saved images</button>
-            <button class="tablinks" onclick="">My images</button>
+            <button class="tablinks" onclick="switchTab("SavedImages", this)">Saved images</button>
+            <button class="tablinks" onclick="switchTab("MyImages", this)">My images</button>
         </div>
     
         <div id="SavedImages" class="tabcontent">
             {% for image in savedimages %}
             <div class="image-container">
-                <a href="{ url 'images_post_view' image.id }"><img class="image" src="{{ image.image.url }}" alt="{{ image.title }}" /></a>
-                <p class="image-title">{{ image.title }}</p>
+                <a href="{% url 'images_post_view' image.id %}"><img class="image" src="{{ image.url }}" alt="{{ image.title }}" /></a>
             </div>
             {% endfor %}
         </div>
 
-        <div id="MyImages" class="tabcontent">
+        <div id="MyImages" class="tabcontent" id="default">
             {% for image in myimages %}
             <div class="image-container">
-                <a href="{ url 'images_post_view' image.id }"><img class="image" src="{{ image.image.url }}" alt="{{ image.title }}" /></a>
-                <p class="image-title">{{ image.title }}</p>
+                <a href="{% url 'images_post_view' image.id %}"><img class="image" src="{{ image.url }}" alt="{{ image.title }}" /></a>
             </div>
             {% endfor %}
         </div>   

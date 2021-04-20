@@ -2,11 +2,17 @@
 
 {% block content %}
 
-<div class="post-container">
-    <p class="image-title">{{ image.title }}</p>
-    <p class="image-description">{{ image.description }}</p>
-<!--    <p class="image-user">@{{ image.user.username }}</p> -->
-    <img class="image" src="{{ image.file.url }}" alt="{{ image.title }}" />
-</div>
+<br>
+<center>
+    <div class="post-container">
+        <p class="image-title">{{ image.title }}</p>
+        <p class="image-description">{{ image.description }}</p>
+        <p class="image-user">@{{ image.uploader.username }}</p>
+        <img class="image" src="{{ image.url }}" alt="{{ image.title }}" />
+        <a href="{% url 'save_image' image.id %}"><button>Save Image</button></a>
+        <a href="{% url 'unsave_image' image.id %}"><button>Remove from saved</button></a>
+        <a href="{% url 'edit_image' image.id %}"><button>Edit</button></a>
+    </div>
+</center>
 
 {% endblock %}

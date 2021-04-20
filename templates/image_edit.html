@@ -5,8 +5,10 @@
 <div class="post-container">
     <p class="image-title">{{ image.title }}</p>
     <p class="image-description">{{ image.description }}</p>
-<!--    <p class="image-user">@{{ image.user.username }}</p> -->
+    <p class="image-user">@{{ image.uploader.username }}</p>
     <img class="image" src="{{ image.file.url }}" alt="{{ image.title }}" />
+    <a href="{% url 'delete_image' image.id %}"><button>Delete</button></a>
+    <a href="{% url 'image_post' image.id %}"><button>Back to image</button></a>
 </div>
 
 {% endblock %}
