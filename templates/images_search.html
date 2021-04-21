@@ -17,14 +17,16 @@
     {% endif %}
     
     {% if images %}
+    <center>
         <div class="images-container">
             <p>Images</p>
             {% for image in images %}
             <div class="image-container">
-                <a href="{% url 'image_post' image.id %}"><img class="image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
+                <a href="{% url 'image_post' image.id %}"><img class="thumbnail_image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
             </div>
             {% endfor %}
         </div>
+    </center>
     {% endif %}
 </center>
 

@@ -36,10 +36,10 @@ switchTab("MyImages", document.getElementById("MyImages"));
     </div>
 
     <div class="profilecontent">
-        <div id="images">
+        <div id="images" class="images-container">
             {% for image in images %}
             <div class="image-container">
-                <a href="{% url 'image_post' image.id %}"><img class="image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
+                <a href="{% url 'image_post' image.id %}"><img class="thumbnail_image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
             </div>
             {% endfor %}
         </div>   

@@ -12,10 +12,12 @@ function switchTab(tabName) {
   }
 
   // Remove the background color of all tablinks/buttons
+/*
   tablinks = document.getElementsByClassName("tablink");
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].style.backgroundColor = "grey";
   }
+*/
 
   element = document.getElementById(tabName);
 
@@ -23,7 +25,9 @@ function switchTab(tabName) {
   element.style.display = "block";
 
   // Add the specific color to the button used to open the tab content
+/*
   element.style.backgroundColor = "darkgrey";
+*/
 }
 
 window.addEventListener("load", function(){
@@ -49,19 +53,23 @@ window.addEventListener("load", function(){
         </div>
 
         <div id="SavedImages" class="tabcontent">
-            {% for image in savedimages %}
-            <div class="image-container">
-                <a href="{% url 'image_post' image.id %}"><img class="image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
+            <div class="images-container">
+                {% for image in savedimages %}
+                <div class="image-container">
+                    <a href="{% url 'image_post' image.id %}"><img class="thumbnail_image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
 
         <div id="MyImages" class="tabcontent">
-            {% for image in myimages %}
-            <div class="image-container">
-                <a href="{% url 'image_post' image.id %}"><img class="image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
-            </div>
-            {% endfor %}
+            <div class="images-container">
+                {% for image in myimages %}
+                <div class="image-container">
+                    <a href="{% url 'image_post' image.id %}"><img class="thumbnail_image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
+                </div>
+                {% endfor %}
+            </div>   
         </div>   
     </div>
 </center>

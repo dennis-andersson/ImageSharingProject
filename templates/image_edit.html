@@ -7,7 +7,7 @@
         <p class="image-title">{{ image.title }}</p>
         <p class="image-description">{{ image.description }}</p>
         <p class="image-user">@{{ image.uploader.username }}</p>
-        <img class="image" src="{{ image.url }}" alt="{{ image.title }}" /><br>
+        <img class="post_image" src="{{ image.url }}" alt="{{ image.title }}" /><br>
         <a href="{% url 'image_delete' image.id %}"><button>Delete</button></a><br>
         <a href="{% url 'image_post' image.id %}"><button>Back to image</button></a>
     </div>
