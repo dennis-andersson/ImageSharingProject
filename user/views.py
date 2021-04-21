@@ -1,14 +1,23 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from .forms import SignUpForm
 from images.models import Image, SavedImage
+from django.contrib.auth.models import User
 from utils import get_image_dict, get_images_dict
 
 
+def show_profile_view(request, id):
+    images = get_images_dict(Image.objects.filter(uploader_id=id))
+    profile = get_object_or_404(User, pk=id)
+    return render(request, "show-profile.html", {'images': images, 'profile': profile})
+
 def profile_view(request, id):
     savedimages = SavedImage.objects.filter(user_id=request.user.id)
-    savedimages = get_images_dict([si.image for si in savedimages])
-    myimages = get_images_dict(Image.objects.filter(uploader_id=request.user.id))
+    if len(savedimages) > 0:
+        savedimages = get_images_dict([si.image for si in savedimages])
+    myimages = Image.objects.filter(uploader_id=request.user.id)
+    if len(myimages) > 0:
+        myimages = get_images_dict(myimages)
     return render(request, "user-profile.html", {'savedimages': savedimages, 'myimages': myimages})
 
 def login_view(request):

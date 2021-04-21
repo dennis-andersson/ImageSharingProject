@@ -1,13 +1,31 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ImageForm
-from .models import Image
+from .models import Image, SavedImage
 from django.contrib.auth.models import User
 from utils import get_image_dict, get_images_dict
 
 
+def image_save_view(request, id):
+    n = len(SavedImage.objects.filter(user_id=request.user.id).filter(image_id=id))
+    if n == 0:
+        image = get_object_or_404(Image, pk=id)
+        saved_image = SavedImage(user=request.user, image=image)
+        saved_image.save()
+    return HttpResponseRedirect('/post/' + str(id))
+
+def image_unsave_view(request, id):
+    saved_image = SavedImage.objects.filter(user_id=request.user.id).filter(image_id=id)
+    if len(saved_image) > 0:
+        saved_image = saved_image[0]
+        saved_image.delete()
+    return HttpResponseRedirect('/post/' + str(id))
+
 def images_post_view(request, id):
+    saved = len(SavedImage.objects.filter(user_id=request.user.id).filter(image_id=id)) > 0
     image = get_image_dict(get_object_or_404(Image, pk=id))
-    return render(request, 'image_post.html', {'image': image, 'user': request.user})
+    uploader = image['uploader'].id == request.user.id
+    return render(request, 'image_post.html', {'image': image, 'user': request.user, 'saved': saved, 'uploader': uploader})
 
 def images_browse_view(request):
     all_images = Image.objects.all().order_by('-upload_date')
@@ -23,17 +41,23 @@ def images_search_view(request):
         searched_users = User.objects.filter(username__contains=query)
         images = get_images_dict(searched_images)
 
-    return render(request, 'images_list.html', {'images': images, 'user': request.user})
+    return render(request, 'images_search.html', {'images': images, 'users': searched_users, 'query': query, 'user': request.user})
 
 def images_list_view(request):
     images = Image.objects.all().order_by('-upload_date')
     return render(request, 'images_list.html', {'images': images, 'user': request.user})
 
 def images_uploads_view(request):
-    images = Image.objects.filter(user=request.user) #.order_by('-upload_date')
-    return render(request, 'images_uploads.html', {'images': images})
+    images = get_images_dict(Image.objects.filter(uploader_id=request.user.id)) #.order_by('-upload_date')
+    return render(request, 'images_list.html', {'images': images})
+
+def images_profile_uploads_view(request, id):
+    images = get_images_dict(Image.objects.filter(uploader_id=request.user.id))
+    return render(request, 'images_list.html', {'images': images})
 
 def image_upload_view(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login/')
     form = ImageForm()
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -41,26 +65,27 @@ def image_upload_view(request):
         if form.is_valid():
             image = form.save(commit=False)
             image.uploader = request.user
-            image.thumbnail = image.get_thumbnail_filename()
             image.save()
-            form = ImageForm()
-            redirect('/profile/' + request.user.id + '/uploads')
+            return HttpResponseRedirect('/profile/' + str(request.user.id) + '/uploads/')
 
     return render(request, 'image_upload.html', {'form': form})
 
 def images_edit_view(request, id):
-    image = Image.objects.filter(id=id)
-    Image.objects.order_by(upload_date)
-    return render(request, 'image_edit.html', {"image": image, 'user': request.user})
+    image = get_object_or_404(Image, pk=id)
+    if image.uploader.id == request.user.id:
+        image = get_image_dict(image)
+        return render(request, 'image_edit.html', {"image": image, 'user': request.user})
+    else:
+        return HttpResponseRedirect('/post/' + str(id))
 
 def images_delete_view(request, id):
     image = get_object_or_404(Image, pk=id)
     if image:
         if request.user.id == image.uploader.id:
             image.delete()
-            redirect('/profile/uploads')
+            return HttpResponseRedirect('/profile/uploads/')
         else:
-            pass
+            return HttpResponseRedirect('/post/' + str(id))
 
 def welcome_view(request):
     return render(request, "welcome.html", {'user': request.user})

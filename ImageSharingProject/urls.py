@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from user.views import login_view, logout_view, signup_view, profile_view
-from images.views import * #images_post_view, images_browse_view, images_search_view, images_list_view, images_uploads_view, image_upload_view, welcome_view
+from user.views import login_view, logout_view, signup_view, profile_view, show_profile_view
+from images.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,12 +26,16 @@ urlpatterns = [
     path('signup/', signup_view, name='signup'),
     path('upload/', image_upload_view, name='image_upload'),
     path('profile/uploads/', images_uploads_view, name='image_uploads'),
+    path('profile/<int:id>/uploads/', images_profile_uploads_view, name='image_profile_uploads'),
     path('post/<int:id>', images_post_view, name='image_post'),
     path('post/edit/<int:id>', images_edit_view, name='image_edit'),
     path('post/delete/<int:id>', images_delete_view, name='image_delete'),
     path('list/', images_list_view, name='images_list'),
-    path('browse/', images_browse_view, name='image_browse'),
+    path('browse/', images_browse_view, name='images_browse'),
     path('search/', images_search_view, name='image_search'),
+    path('save/<int:id>', image_save_view, name='image_save'),
+    path('unsave/<int:id>', image_unsave_view, name='image_unsave'),
     path('profile/', profile_view, name='user_profile'),
     path('profile/<int:id>', profile_view, name='user_profile'),
+    path('showprofile/<int:id>', show_profile_view, name='show_profile'),
 ]

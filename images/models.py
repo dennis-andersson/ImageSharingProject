@@ -11,8 +11,9 @@ import glob, os
 
 def get_file_path(instance, filename):
     now = datetime.now()
-#    path = '/'.join(['', 'static', 'uploads', instance.user.username, f'{now.year}-{now.month}-{now.day}', filename])
     path = os.path.join('static', 'uploads', instance.uploader.username, f'{now.year}-{now.month}-{now.day}', filename)
+    name, ext = os.path.splitext(path)
+    instance.thumbnail = '/' + name.replace(os.path.sep, '/') + "-thumbnail" + ext
     return path
 
 
@@ -37,7 +38,7 @@ class Image(models.Model):
             return "GIF"
 
     def get_thumbnail_filename(self):
-        filename = self.image.url
+        filename = self.image.path
         name, ext = os.path.splitext(filename)
         thumbnail_filename = name + "-thumbnail" + ext
         return thumbnail_filename
@@ -45,7 +46,7 @@ class Image(models.Model):
     def create_thumbnail(self):
         filename = self.image.path
         thumbnail_filename = self.get_thumbnail_filename()
-        size = 128, 128
+        size = 280, 280
         ext = os.path.splitext(filename)[1]
 
         with PIL_Image.open(filename) as im:
@@ -54,7 +55,6 @@ class Image(models.Model):
 
 
     def save(self):
-#        self.thumbnail = self.get_thumbnail_filename()
         super(Image, self).save()
         self.create_thumbnail()
 
@@ -63,15 +63,19 @@ class Image(models.Model):
 
 
 class SavedImage(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.OneToOneField(Image, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
 
 
 @receiver(post_delete, sender=Image)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
-    if instance.file:
-        if os.path.isfile(instance.file_path):
-            os.remove(instance.file_path)
+    if instance.image:
+        if os.path.isfile(instance.image.path):
+            os.remove(instance.image.path)
+
+        thumbnail = instance.thumbnail[1:]
+        if os.path.isfile(thumbnail):
+            os.remove(thumbnail)
 
 
 @receiver(pre_save, sender=Image)
@@ -80,11 +84,11 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
         return False
 
     try:
-        old_file = sender.objects.get(pk=instance.pk).file
+        old_file = sender.objects.get(pk=instance.pk).image
     except sender.DoesNotExist:
         return False
 
-    new_file = instance.file
+    new_file = instance.image
     if not new_file == old_file:
         if os.path.isfile(old_file.path):
             os.remove(old_file.path)
