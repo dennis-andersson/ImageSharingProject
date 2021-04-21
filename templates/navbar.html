@@ -6,8 +6,12 @@
         <div class="dropdown">
             <button class="dropdown-button">Images</button>
             <div class="dropdown-content">
-                <a href="{% url 'images_list' %}">List</a>
+                <a href="{% url 'images_browse' %}">Browse</a>
+                {% if user.is_authenticated %}
                 <a href="{% url 'image_upload' %}">Upload</a>
+                {% else %}
+                <a href="{% url 'login' %}">Upload</a>
+                {% endif %}
             </div>
         </div>
     </li>
@@ -33,7 +37,7 @@
         <a href="{% url 'login' %}">Login</a>
     </li>
     <li class="nav-item">
-        <a href="{% url 'signup' %}">Signup</a>
+        <a href="{% url 'signup' %}">Sign up</a>
     </li>
     {% endif %}
 </ul>

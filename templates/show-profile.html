@@ -3,7 +3,7 @@
 {% block content %}
 
 <script type='text/javascript'>
-function switchTab(tabName) {
+function switchTab(tabName, element) {
   // Hide all elements with class="tabcontent" by default */
   var i, tabcontent, tablinks;
   tabcontent = document.getElementsByClassName("tabcontent");
@@ -17,47 +17,27 @@ function switchTab(tabName) {
     tablinks[i].style.backgroundColor = "grey";
   }
 
-  element = document.getElementById(tabName);
-
   // Show the specific tab content
-  element.style.display = "block";
+  document.getElementById(tabName).style.display = "block";
 
   // Add the specific color to the button used to open the tab content
   element.style.backgroundColor = "darkgrey";
 }
 
-window.addEventListener("load", function(){
-    switchTab("MyImages");
-});
-
+switchTab("MyImages", document.getElementById("MyImages"));
 // Get the element with id="defaultOpen" and click on it
 //document.getElementById("default").click(); 
 </script>
 
 <center>
     <div class="userdetails">
-        <h1>{{ user.first_name }} {{ user.last_name }}</h1>
-        <h2>@{{ user.username }}</h2>
+        <h1>{{ profile.first_name }} {{ profile.last_name }}</h1>
+        <h2><a href="{% url 'show_profile' profile.id %}">@{{ profile.username }}</a></h2>
     </div>
 
     <div class="profilecontent">
-        <a href="{% url 'image_upload' %}"><button>Upload image</button></a>
-
-        <div class="tab">
-            <button class="tablinks" onclick="switchTab("SavedImages")">Saved images</button>
-            <button class="tablinks" onclick="switchTab("MyImages")">My images</button>
-        </div>
-
-        <div id="SavedImages" class="tabcontent">
-            {% for image in savedimages %}
-            <div class="image-container">
-                <a href="{% url 'image_post' image.id %}"><img class="image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
-            </div>
-            {% endfor %}
-        </div>
-
-        <div id="MyImages" class="tabcontent">
-            {% for image in myimages %}
+        <div id="images">
+            {% for image in images %}
             <div class="image-container">
                 <a href="{% url 'image_post' image.id %}"><img class="image" src="{{ image.thumbnail }}" alt="{{ image.title }}" /></a>
             </div>

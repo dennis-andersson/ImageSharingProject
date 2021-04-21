@@ -7,11 +7,22 @@
     <div class="post-container">
         <p class="image-title">{{ image.title }}</p>
         <p class="image-description">{{ image.description }}</p>
-        <p class="image-user">@{{ image.uploader.username }}</p>
+        <p class="image-user"><a href="{% url 'show_profile' image.uploader.id %}">@{{ image.uploader.username }}</a></p>
         <img class="image" src="{{ image.url }}" alt="{{ image.title }}" />
-        <a href="{% url 'save_image' image.id %}"><button>Save Image</button></a>
-        <a href="{% url 'unsave_image' image.id %}"><button>Remove from saved</button></a>
-        <a href="{% url 'edit_image' image.id %}"><button>Edit</button></a>
+        {% if user.is_authenticated %}
+            <br>
+            {% if saved %}
+                <a href="{% url 'image_unsave' image.id %}"><button>Remove from saved</button></a>
+            {% else %}
+                <a href="{% url 'image_save' image.id %}"><button>Save Image</button></a>
+            {% endif %}
+
+            {% if uploader %}
+                <br>
+                <a href="{% url 'image_edit' image.id %}"><button>Edit</button></a>
+            {% endif %}
+        {% endif %}
+
     </div>
 </center>
 
