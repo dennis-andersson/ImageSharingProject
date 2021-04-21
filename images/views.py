@@ -1,4 +1,3 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ImageForm
 from .models import Image, SavedImage
@@ -12,14 +11,14 @@ def image_save_view(request, id):
         image = get_object_or_404(Image, pk=id)
         saved_image = SavedImage(user=request.user, image=image)
         saved_image.save()
-    return HttpResponseRedirect('/post/' + str(id))
+    return redirect('/post/' + str(id))
 
 def image_unsave_view(request, id):
     saved_image = SavedImage.objects.filter(user_id=request.user.id).filter(image_id=id)
     if len(saved_image) > 0:
         saved_image = saved_image[0]
         saved_image.delete()
-    return HttpResponseRedirect('/post/' + str(id))
+    return redirect('/post/' + str(id))
 
 def images_post_view(request, id):
     saved = len(SavedImage.objects.filter(user_id=request.user.id).filter(image_id=id)) > 0
@@ -57,7 +56,7 @@ def images_profile_uploads_view(request, id):
 
 def image_upload_view(request):
     if not request.user.is_authenticated:
-        return HttpResponseRedirect('/login/')
+        return redirect('/login/')
     form = ImageForm()
     if request.method == 'POST':
         form = ImageForm(request.POST, request.FILES)
@@ -66,7 +65,7 @@ def image_upload_view(request):
             image = form.save(commit=False)
             image.uploader = request.user
             image.save()
-            return HttpResponseRedirect('/profile/' + str(request.user.id) + '/uploads/')
+            return redirect('/profile/' + str(request.user.id) + '/uploads/')
 
     return render(request, 'image_upload.html', {'form': form})
 
@@ -76,16 +75,16 @@ def images_edit_view(request, id):
         image = get_image_dict(image)
         return render(request, 'image_edit.html', {"image": image, 'user': request.user})
     else:
-        return HttpResponseRedirect('/post/' + str(id))
+        return redirect('/post/' + str(id))
 
 def images_delete_view(request, id):
     image = get_object_or_404(Image, pk=id)
     if image:
         if request.user.id == image.uploader.id:
             image.delete()
-            return HttpResponseRedirect('/profile/uploads/')
+            return redirect('/profile/uploads/')
         else:
-            return HttpResponseRedirect('/post/' + str(id))
+            return redirect('/post/' + str(id))
 
 def welcome_view(request):
     return render(request, "welcome.html", {'user': request.user})
